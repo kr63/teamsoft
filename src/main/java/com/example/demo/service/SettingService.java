@@ -9,5 +9,7 @@ public interface SettingService {
 
     Optional<Setting> getSetting(Long id);
 
-    Setting saveSetting(Setting setting);
+    void saveSetting(Setting setting);
+
+    void delete(Long id);
 }

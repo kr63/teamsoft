@@ -20,8 +20,7 @@ import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -37,12 +36,14 @@ public class SettingControllerTest {
     private SettingService settingService;
 
     private List<Setting> settings;
+    private Setting setting;
 
     @Before
     public void setUp() {
         Setting setting1 = new Setting(1L, "setting1", 1, new ArrayList<>());
         Setting setting2 = new Setting(2L, "setting2", 1, new ArrayList<>());
         settings = Arrays.asList(setting1, setting2);
+        setting = new Setting(3L, "setting3", 1, new ArrayList<>());
     }
 
     @Test
@@ -65,11 +66,9 @@ public class SettingControllerTest {
     @Test
     public void getSetting_ShouldReturnOne() throws Exception {
 
-        Optional<Setting> setting = Optional.of(
-                new Setting(1L, "setting1", 1, new ArrayList<>()));
 
-        given(settingService.getSetting(1L)).willReturn(setting);
-        String expect = "{id: 1, type: setting1, item1: 1, details: []}";
+        given(settingService.getSetting(1L)).willReturn(Optional.of(setting));
+        String expect = "{id: 3, type: setting3, item1: 1, details: []}";
 
         mockMvc.perform(get(URL + "{id}", 1L)
                 .accept(MediaType.APPLICATION_JSON))
@@ -101,5 +100,14 @@ public class SettingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(g.toJson(setting)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void deleteSetting_ShouldReturnGoneStatus() throws Exception {
+        long id = 1L;
+        given(settingService.getSetting(id)).willReturn(Optional.of(setting));
+        mockMvc.perform(delete(URL + "{id}", 1)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isGone());
     }
 }

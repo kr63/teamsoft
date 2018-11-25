@@ -26,7 +26,12 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public Setting saveSetting(Setting setting) {
-        return settingRepository.save(setting);
+    public void saveSetting(Setting setting) {
+        settingRepository.save(setting);
+    }
+
+    @Override
+    public void delete(Long id) {
+        settingRepository.deleteById(id);
     }
 }

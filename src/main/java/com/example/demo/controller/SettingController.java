@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("api")
 public class SettingController {
@@ -35,5 +37,16 @@ public class SettingController {
         setting.setId(null);
         settingService.saveSetting(setting);
         return new ResponseEntity<>(setting, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/setting/{id}")
+    public ResponseEntity<Void> deleteSetting(@PathVariable Long id) {
+        Optional<Setting> setting = settingService.getSetting(id);
+        if (setting.isPresent()) {
+            settingService.delete(id);
+            return new ResponseEntity<>(HttpStatus.GONE);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
