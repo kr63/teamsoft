@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -24,11 +26,14 @@ public class Setting {
             initialValue = 6)
     private Long id;
 
+    @NotNull(message = "type value must be not null")
     private String type;
 
+    @Max(value = 100, message = "item value mast be 100 max")
     @Column(name = "item")
     private Integer item1;
 
+    @NotNull(message = "details can't be null")
     @JsonManagedReference
     @OneToMany(mappedBy = "setting", cascade = CascadeType.ALL)
     List<Detail> details;

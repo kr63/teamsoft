@@ -5,6 +5,7 @@ import com.example.demo.model.Setting;
 import com.example.demo.service.SettingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,7 +31,7 @@ public class SettingController {
     }
 
     @PostMapping("setting")
-    public ResponseEntity<Setting> addSetting(@RequestBody Setting setting) {
+    public ResponseEntity<Setting> addSetting(@Validated @RequestBody Setting setting) {
         setting.setId(null);
         settingService.saveSetting(setting);
         return new ResponseEntity<>(setting, HttpStatus.CREATED);
