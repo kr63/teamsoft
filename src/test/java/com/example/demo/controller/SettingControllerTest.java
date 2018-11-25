@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Setting;
 import com.example.demo.service.SettingService;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -86,5 +88,18 @@ public class SettingControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(
                         String.format("Not found setting with id: %d", id)));
+    }
+
+    @Test
+    public void addSetting_ShouldReturnCreatedStatus() throws Exception {
+        String data = "{id: 1, type: setting1, item1: 1, details: []}";
+        Gson g = new Gson();
+        Setting setting = g.fromJson(data, Setting.class);
+
+        mockMvc.perform(post(URL)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(g.toJson(setting)))
+                .andExpect(status().isCreated());
     }
 }

@@ -5,10 +5,7 @@ import com.example.demo.model.Setting;
 import com.example.demo.service.SettingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api")
@@ -30,5 +27,12 @@ public class SettingController {
         return settingService.getSetting(id)
                 .map(setting -> new ResponseEntity<>(setting, HttpStatus.OK))
                 .orElseThrow(() -> new SettingNotFoundException("Not found setting with id: " + id));
+    }
+
+    @PostMapping("setting")
+    public ResponseEntity<Setting> addSetting(@RequestBody Setting setting) {
+        setting.setId(null);
+        settingService.saveSetting(setting);
+        return new ResponseEntity<>(setting, HttpStatus.CREATED);
     }
 }

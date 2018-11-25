@@ -19,7 +19,11 @@ import java.time.OffsetDateTime;
 public class Detail {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "detail_generator")
+    @SequenceGenerator(
+            name = "detail_generator",
+            sequenceName = "detail_generator",
+            initialValue = 8)
     @Column(name = "id")
     @JsonIgnore
     private Long id;

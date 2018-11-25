@@ -8,4 +8,6 @@ public interface SettingService {
     Iterable<Setting> getAllSettings();
 
     Optional<Setting> getSetting(Long id);
+
+    Setting saveSetting(Setting setting);
 }

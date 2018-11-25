@@ -24,4 +24,9 @@ public class SettingServiceImpl implements SettingService {
     public Optional<Setting> getSetting(Long id) {
         return settingRepository.findById(id);
     }
+
+    @Override
+    public Setting saveSetting(Setting setting) {
+        return settingRepository.save(setting);
+    }
 }

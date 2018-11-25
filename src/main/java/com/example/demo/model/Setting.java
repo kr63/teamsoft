@@ -17,7 +17,11 @@ import java.util.List;
 public class Setting {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "setting_generator")
+    @SequenceGenerator(
+            name = "setting_generator",
+            sequenceName = "setting_generator",
+            initialValue = 6)
     private Long id;
 
     private String type;
