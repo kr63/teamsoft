@@ -67,7 +67,7 @@ public class SettingControllerTest {
     public void getSetting_ShouldReturnOne() throws Exception {
 
 
-        given(settingService.getSetting(1L)).willReturn(Optional.of(setting));
+        given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
         String expect = "{id: 3, type: setting3, item1: 1, details: []}";
 
         mockMvc.perform(get(URL + "{id}", 1L)
@@ -105,7 +105,7 @@ public class SettingControllerTest {
     @Test
     public void deleteSetting_ShouldReturnGoneStatus() throws Exception {
         long id = 1L;
-        given(settingService.getSetting(id)).willReturn(Optional.of(setting));
+        given(settingService.getSettingById(id)).willReturn(Optional.of(setting));
         mockMvc.perform(delete(URL + "{id}", 1)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isGone());

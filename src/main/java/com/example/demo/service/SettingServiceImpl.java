@@ -21,7 +21,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public Optional<Setting> getSetting(Long id) {
+    public Optional<Setting> getSettingById(Long id) {
         return settingRepository.findById(id);
     }
 
@@ -31,7 +31,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteSettingById(Long id) {
         settingRepository.deleteById(id);
     }
 }

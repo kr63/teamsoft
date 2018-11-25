@@ -20,14 +20,14 @@ public class SettingController {
         this.settingService = settingService;
     }
 
-    @GetMapping(value = "/setting")
+    @GetMapping("/setting")
     public ResponseEntity<Iterable<Setting>> getAll() {
         return new ResponseEntity<>(settingService.getAllSettings(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/setting/{id}")
+    @GetMapping("/setting/{id}")
     public ResponseEntity<Setting> getSettingById(@PathVariable Long id) {
-        return settingService.getSetting(id)
+        return settingService.getSettingById(id)
                 .map(setting -> new ResponseEntity<>(setting, HttpStatus.OK))
                 .orElseThrow(() -> new SettingNotFoundException("Not found setting with id: " + id));
     }
@@ -39,14 +39,11 @@ public class SettingController {
         return new ResponseEntity<>(setting, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/setting/{id}")
+    @DeleteMapping("/setting/{id}")
     public ResponseEntity<Void> deleteSetting(@PathVariable Long id) {
-        Optional<Setting> setting = settingService.getSetting(id);
-        if (setting.isPresent()) {
-            settingService.delete(id);
-            return new ResponseEntity<>(HttpStatus.GONE);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<Setting> setting = settingService.getSettingById(id);
+        setting.orElseThrow(() -> new SettingNotFoundException("Not found setting with id: " + id));
+        settingService.deleteSettingById(id);
+        return new ResponseEntity<>(HttpStatus.GONE);
     }
 }
