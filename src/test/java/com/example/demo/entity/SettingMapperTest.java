@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.example.demo.entity.SettingMapper.INSTANCE;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
@@ -38,7 +39,7 @@ public class SettingMapperTest {
         setting.setItem1(1);
 
         // when
-        dto = SettingMapper.INSTANCE.convertToDto(setting);
+        dto = INSTANCE.convertToDto(setting);
 
         // than
         assertNotNull(dto);
@@ -56,12 +57,38 @@ public class SettingMapperTest {
         dto.setId(1L);
 
         // when
-        setting = SettingMapper.INSTANCE.convertFromDto(dto);
+        setting = INSTANCE.convertFromDto(dto);
 
         // than
         assertNotNull(setting);
         assertEquals("type1", setting.getType());
         assertEquals(detail1, setting.getDetails().get(0));
         assertEquals(detail2, setting.getDetails().get(1));
+    }
+
+    @Test
+    public void shouldPartitionMapToSetting() {
+        // given
+        setting.setType("type1");
+        dto.setType(null);
+
+        // when
+        INSTANCE.mapToSetting(dto, setting);
+
+        // than
+        assertNotNull(setting.getType());
+    }
+
+    @Test
+    public void shouldPartitionMapToDto() {
+        // given
+        setting.setType(null);
+        dto.setType("type1");
+
+        // when
+        INSTANCE.mapToDto(setting, dto);
+
+        // than
+        assertNotNull(dto.getType());
     }
 }
