@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Setting;
+import com.example.demo.entity.Setting;
 
 import java.util.Optional;
 

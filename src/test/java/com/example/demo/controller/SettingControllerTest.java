@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Setting;
+import com.example.demo.entity.Setting;
 import com.example.demo.service.SettingService;
 import com.google.gson.Gson;
 import org.junit.Before;

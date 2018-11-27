@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Setting;
 import com.example.demo.exception.SettingNotFoundException;
-import com.example.demo.model.Setting;
 import com.example.demo.service.SettingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
