@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Setting;
+import com.example.demo.entity.SettingMapper;
 import com.example.demo.service.SettingService;
 import com.google.gson.Gson;
 import org.junit.Before;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(SettingController.class)
+@WebMvcTest({SettingController.class, SettingMapper.class})
 public class SettingControllerTest {
 
     private static final String URL = "/api/setting/";
@@ -47,7 +48,7 @@ public class SettingControllerTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAll_ShouldReturnStatusOkAndExpectedContent() throws Exception {
 
         given(settingService.getAllSettings()).willReturn(settings);
 
@@ -65,7 +66,6 @@ public class SettingControllerTest {
 
     @Test
     public void getSetting_ShouldReturnOne() throws Exception {
-
 
         given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
         String expect = "{id: 3, type: setting3, item1: 1, details: []}";
@@ -91,6 +91,7 @@ public class SettingControllerTest {
 
     @Test
     public void addSetting_ShouldReturnCreatedStatus() throws Exception {
+
         String data = "{id: 1, type: setting1, item1: 1, details: []}";
         Gson g = new Gson();
         Setting setting = g.fromJson(data, Setting.class);
@@ -104,10 +105,28 @@ public class SettingControllerTest {
 
     @Test
     public void deleteSetting_ShouldReturnGoneStatus() throws Exception {
+
         long id = 1L;
         given(settingService.getSettingById(id)).willReturn(Optional.of(setting));
         mockMvc.perform(delete(URL + "{id}", 1)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isGone());
+    }
+
+    @Test
+    public void updateSetting_ShouldReturnOkStatusAndPatchNonCollectionFields() throws Exception {
+
+        given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
+        int id = 1;
+        String expect = "{id: " + id + ", type: setting11, item1: 1}";
+        Gson g = new Gson();
+        Setting newContent = g.fromJson(expect, Setting.class);
+
+        mockMvc.perform(patch(URL + "{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(g.toJson(newContent)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect));
     }
 }

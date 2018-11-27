@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +32,6 @@ public class Setting {
     @Column(name = "item")
     private Integer item1;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "setting", cascade = CascadeType.ALL)
     List<Detail> details;
 }

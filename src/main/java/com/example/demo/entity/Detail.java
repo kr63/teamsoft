@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -32,7 +31,6 @@ public class Detail {
     @Column(name = "create_at")
     private OffsetDateTime dateTime;
 
-    @NotNull
     @JsonBackReference
     @ManyToOne
     Setting setting;
