@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 public class SettingMapperTest {
@@ -22,9 +23,12 @@ public class SettingMapperTest {
         setting.details.add(detail2);
 
         // when
-        SettingDto dto = SettingMapper.INSTANSE.convertToDto(setting);
+        SettingDto dto = SettingMapper.INSTANCE.convertToDto(setting);
 
         // than
         assertNotNull(dto);
+        assertEquals("type1", dto.getType());
+        assertEquals(detail1, dto.getDetails().get(0));
+        assertEquals(detail2, dto.getDetails().get(1));
     }
 }

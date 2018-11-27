@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface SettingMapper {
 
-    SettingMapper INSTANSE = Mappers.getMapper(SettingMapper.class);
+    SettingMapper INSTANCE = Mappers.getMapper(SettingMapper.class);
 
     SettingDto convertToDto(Setting setting);
 
