@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Detail;
 import com.example.demo.entity.Setting;
 import com.example.demo.entity.SettingMapper;
+import com.example.demo.service.DetailService;
 import com.example.demo.service.SettingService;
+import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,11 +18,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,6 +42,9 @@ public class SettingControllerTest {
 
     @MockBean
     private SettingService settingService;
+
+    @MockBean
+    private DetailService detailService;
 
     private List<Setting> settings;
     private Setting setting;
@@ -116,9 +126,10 @@ public class SettingControllerTest {
     @Test
     public void updateSetting_ShouldReturnOkStatusAndPatchNonCollectionFields() throws Exception {
 
-        given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
-        int id = 1;
-        String expect = "{id: " + id + ", type: setting11, item1: 1}";
+        Long id = 1L;
+        setting = new Setting(id, "setting3", 1, new ArrayList<>());
+        given(settingService.getSettingById(id)).willReturn(Optional.of(setting));
+        String expect = "{id:" + id + ", type: setting11, item1: 1}";
         Gson g = new Gson();
         Setting newContent = g.fromJson(expect, Setting.class);
 
@@ -133,21 +144,24 @@ public class SettingControllerTest {
     @Test
     public void updateSetting_ShouldUpdateDetailsCollection() throws Exception {
 
-        given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
-        int id = 1;
-//        String expect = "{id: 3," +
-//                "details:" +
-//                "[{\"dateTime\": \"2018-11-24T16:00:00+04:00\"}, {\"dateTime\": \"2018-11-24T16:00:00+04:00\"}]}";
-        String expect = "{id: 3, details: [{dateTime: 2018-11-24T16:00:00+04:00}]}";
-//        "{}," +
-        Gson g = new Gson();
-        Setting newContent = g.fromJson(expect, Setting.class);
+        Long id = 3L;
+        Setting oldSetting = new Setting(id, "setting1", 1, new ArrayList<>());
+        given(settingService.getSettingById(id)).willReturn(Optional.of(oldSetting));
+
+        Detail detail = new Detail();
+        OffsetDateTime time = OffsetDateTime.now(ZoneId.of("Z"));
+        detail.setDateTime(time);
+        Setting newSetting = new Setting(id, "setting3", 3, singletonList(detail));
+
+        Gson g = Converters.registerOffsetDateTime(new GsonBuilder()).create();
 
         mockMvc.perform(patch(URL + "{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(g.toJson(newContent)))
+                .content(g.toJson(newSetting)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expect));
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath(".type").value("setting3"))
+                .andExpect(jsonPath(".details[0].dateTime").value(time.toString()));
     }
 }
