@@ -66,9 +66,21 @@ public class SettingController {
 
         Setting setting = settingService.getSettingById(id)
                 .orElseThrow(() -> new SettingNotFoundException("Not found setting wiht id: " + id));
+        /*
+        db & request collections exist --> clear db
+        request collection null --> ignored
+         */
+        try {
+            if (!setting.getDetails().isEmpty() && !requestDto.getDetails().isEmpty()) {
+                setting.getDetails().forEach(detailService::deleteDetail);
+            }
+        } catch (NullPointerException ignored) {
+        }
 
-        // request details --> null --> do nothing
-        // request details --> not null --> map
+        /*
+        request collection empty --> clear db
+        request collection null --> ignored
+         */
         try {
             if (requestDto.getDetails().isEmpty()) {
                 setting.getDetails().forEach(detailService::deleteDetail);
