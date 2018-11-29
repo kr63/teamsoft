@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(description = "Entity for Setting object")
 public class Setting {
 
     @Id
@@ -25,9 +28,11 @@ public class Setting {
             initialValue = 6)
     private Long id;
 
-    @Length(max = 20, message = "type value length must be 10 symbols max")
+    @ApiModelProperty(notes = "Type value must be 20 characters max")
+    @Length(max = 20, message = "type value length must be 20 symbols max")
     private String type;
 
+    @ApiModelProperty(notes = "Item1 value must be 100 max")
     @Max(value = 100, message = "item value must be 100 max")
     @Column(name = "item")
     private Integer item1;
