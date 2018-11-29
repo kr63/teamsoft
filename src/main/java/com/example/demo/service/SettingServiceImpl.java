@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Repository.SettingRepository;
+import com.example.demo.repository.SettingRepository;
 import com.example.demo.entity.Setting;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Repository.DetailRepository;
+import com.example.demo.repository.DetailRepository;
 import com.example.demo.entity.Detail;
 import org.springframework.stereotype.Service;
 
