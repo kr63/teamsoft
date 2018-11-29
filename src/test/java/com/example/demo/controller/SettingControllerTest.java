@@ -129,4 +129,25 @@ public class SettingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expect));
     }
+
+    @Test
+    public void updateSetting_ShouldUpdateDetailsCollection() throws Exception {
+
+        given(settingService.getSettingById(1L)).willReturn(Optional.of(setting));
+        int id = 1;
+//        String expect = "{id: 3," +
+//                "details:" +
+//                "[{\"dateTime\": \"2018-11-24T16:00:00+04:00\"}, {\"dateTime\": \"2018-11-24T16:00:00+04:00\"}]}";
+        String expect = "{id: 3, details: [{dateTime: 2018-11-24T16:00:00+04:00}]}";
+//        "{}," +
+        Gson g = new Gson();
+        Setting newContent = g.fromJson(expect, Setting.class);
+
+        mockMvc.perform(patch(URL + "{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(g.toJson(newContent)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect));
+    }
 }

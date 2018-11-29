@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,6 @@ public class Detail {
             sequenceName = "detail_generator",
             initialValue = 8)
     @Column(name = "id")
-    @JsonIgnore
     private Long id;
 
     @Column(name = "create_at")

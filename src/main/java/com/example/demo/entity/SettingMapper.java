@@ -1,10 +1,11 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.DetailDto;
 import com.example.demo.dto.SettingDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
@@ -13,11 +14,20 @@ public interface SettingMapper {
 
     SettingMapper INSTANCE = Mappers.getMapper(SettingMapper.class);
 
-    void mapToSetting(SettingDto dto, @MappingTarget Setting setting);
+    @Mapping(target = "id", ignore = true)
+    void dtoToSetting(SettingDto dto, @MappingTarget Setting setting);
 
-    void mapToDto(Setting setting, @MappingTarget SettingDto dto);
+    void settingToDto(Setting setting, @MappingTarget SettingDto dto);
 
-    Setting convertFromDto(SettingDto dto);
+    Setting dtoToSetting(SettingDto dto);
 
-    SettingDto convertToDto(Setting setting);
+    Detail dtoToDetail(DetailDto dto);
+
+    SettingDto settingToDto(Setting setting);
+
+    DetailDto detailToDto(Detail detail);
+
+    List<Detail> dtoToDetails(List<DetailDto> dto);
+
+    List<DetailDto> detailsToDto(List<Detail> dto);
 }

@@ -32,6 +32,15 @@ public class Setting {
     @Column(name = "item")
     private Integer item1;
 
-    @OneToMany(mappedBy = "setting", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "setting", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "setting",
+            cascade = {
+//                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+//                    CascadeType.REMOVE,
+//                    CascadeType.REFRESH
+                    CascadeType.DETACH,
+    })
+//    @OneToMany(mappedBy = "setting", cascade = CascadeType.DETACH)
     List<Detail> details;
 }
